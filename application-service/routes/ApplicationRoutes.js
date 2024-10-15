@@ -1,6 +1,7 @@
 const express = require('express');
 const db = require('../model/Application');
 const router = express.Router();
+const axios = require('axios');
 
 // Apply for a job
 router.post('/', (req, res) => {
@@ -28,5 +29,16 @@ router.get('/', (req, res) => {
     }
   });
 });
+
+// Route to fetch jobs from Job Service
+router.get('/jobs', async (req, res) => {
+  try {
+    const jobs = await axios.get('http://localhost:5000/jobs');  // Job Service URL
+    res.status(200).json(jobs.data);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching jobs from Job Service' });
+  }
+});
+
 
 module.exports = router;
